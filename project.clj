@@ -2,7 +2,10 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
                  [reagent "0.6.0"]
-                 [re-frame "0.9.2"]]
+                 [re-frame "0.9.2"]
+                 [cljs-ajax "0.5.9"]
+                 [day8.re-frame/http-fx "0.1.3"]
+                 [com.cemerick/url "0.1.1"]]
 
   :plugins [[lein-cljsbuild "1.1.4"]]
 
