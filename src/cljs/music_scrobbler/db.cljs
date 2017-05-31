@@ -1,4 +1,6 @@
 (ns music-scrobbler.db)
 
 (def default-db
-  {:name "re-frame"})
+  {:name "music-scrobbler"
+   :api-key ""
+   :secret-key ""})
