@@ -59,6 +59,21 @@
        [recent-tracks-panel
         @user-recent-tracks-list :name :artist]]])))
 
+(defn authorize-user-panel []
+  (let [api-key (re-frame/subscribe [:api-key])
+        token (re-frame/subscribe [:token])
+        api-sig (re-frame/subscribe [:api-sig])
+        api-result (re-frame/subscribe [:api-result])
+        auth-url (str "http://www.last.fm/api/auth/?"
+                      "api_key=" @api-key
+                      "&cb=" callback-url)]
+ [:div.authentication-panel
+  [:a.button.danger
+   {:href auth-url} "Authorize"]
+  #_[button "primary" "Login Now"
+  #(do (.log js/console "button clicked")
+       (re-frame/dispatch [:handler-get-session @api-sig @token]))]]))
+
 (defn set-credentials []
   (let [username (re-frame/subscribe [:username])
         session-key (re-frame/subscribe [:session-key])]
