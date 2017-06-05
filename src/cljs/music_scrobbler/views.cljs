@@ -101,8 +101,11 @@
 (defn set-credentials []
   (let [username (re-frame/subscribe [:username])
         session-key (re-frame/subscribe [:session-key])]
-   (cookies/set! "username" @username)
-   (cookies/set! "session_key" @session-key)))
+   (when-not (and (empty? @username)
+                  (empty? @session-key))
+    (when (empty? (cookies/get "username"))
+     (cookies/set! "username" @username)
+     (cookies/set! "session_key" @session-key)))))
 
 (defn user-authorization-dispatches []
  (let [api-key (re-frame/subscribe [:api-key])
