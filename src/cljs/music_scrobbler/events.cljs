@@ -28,6 +28,22 @@
  (fn [db [_ api-sig]]
    (assoc db :api-sig api-sig)))
 
+;; Get Session Request - Returns User and Session Key
+(re-frame/reg-event-fx
+ :handler-get-session
+ (fn [{:keys [db]} [_ api-key api-sig token]]
+   { :http-xhrio {:method         :get
+                 :uri             (str base "?method="
+                                       "auth.getSession"
+                                       "&api_key=" api-key
+                                       "&api_sig=" api-sig
+                                       "&token=" token
+                                       "&format=json")
+                 :timeout         8000
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [:good-get-session-result]
+                 :on-failure      [:bad-get-session-result]}}))
+
 ;; Get Request for Recent Tracks
 (re-frame/reg-event-fx
  :handler-get-recent-artists
@@ -41,6 +57,17 @@
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [:good-http-result]
                  :on-failure      [:bad-http-result]}}))
+
+;; On Success/Fail Response, Get Result
+(re-frame/reg-event-db
+  :good-get-session-result
+  (fn [db [_ result]]
+    (assoc db :get-session-result result)))
+
+(re-frame/reg-event-db
+  :bad-get-session-result
+  (fn [db [_ result]]
+    (assoc db :get-session-result result)))
 
 (re-frame/reg-event-db
   :good-http-result
