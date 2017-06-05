@@ -59,6 +59,12 @@
        [recent-tracks-panel
         @user-recent-tracks-list :name :artist]]])))
 
+(defn set-credentials []
+  (let [username (re-frame/subscribe [:username])
+        session-key (re-frame/subscribe [:session-key])]
+   (cookies/set! "username" @username)
+   (cookies/set! "session_key" @session-key)))
+
 
 (defn main-panel []
   (let [name (re-frame/subscribe [:name])]
