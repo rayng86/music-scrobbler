@@ -6,6 +6,8 @@
               [music-scrobbler.utils :refer [keyword-this]]
               [music-scrobbler.generic.forms :refer [input-text button]]))
 
+(def callback-url "http://localhost:3669")
+
 (defn generate-api-sig-fn [method artist track ts]
  (let [api-key (re-frame/subscribe [:api-key])
        secret-key (re-frame/subscribe [:secret-key])
