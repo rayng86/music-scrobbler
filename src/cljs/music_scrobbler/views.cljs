@@ -1,9 +1,37 @@
 (ns music-scrobbler.views
     (:require [re-frame.core :as re-frame]
+              [reagent.cookies :as cookies]
               [clojure.string :as string]
               [cemerick.url :as url]
               [music-scrobbler.utils :refer [keyword-this]]
               [music-scrobbler.generic.forms :refer [input-text button]]))
+
+(defn generate-api-sig-fn [method artist track ts]
+ (let [api-key (re-frame/subscribe [:api-key])
+       secret-key (re-frame/subscribe [:secret-key])
+       sk (cookies/get "session_key")
+       api-sig (js/md5 (str "api_key" @api-key
+                            "artist" artist
+                            "method" method
+                            "sk" sk
+                            "timestamp" ts
+                            "track" track
+                            @secret-key))]
+   (do #_(.log js/console api-sig)
+       #_(.log js/console (str "api_key" @api-key
+                             "artist" artist
+                             "method" method
+                             "sk" sk
+                             "timestamp" ts
+                             "track" track
+                             @secret-key))
+       (re-frame/dispatch
+        [:handler-scrobble-track @api-key
+                                 api-sig
+                                 sk
+                                 artist
+                                 track
+                                 (str ts)]))))
 
 (defn recent-tracks-panel
   [coll track artist]
