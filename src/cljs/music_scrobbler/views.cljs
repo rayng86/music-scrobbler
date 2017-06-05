@@ -59,6 +59,30 @@
        [recent-tracks-panel
         @user-recent-tracks-list :name :artist]]])))
 
+(defn manual-track-scrobble-panel []
+  (let [artist-label "artist name"
+        track-label "track name"
+        artist (re-frame/subscribe [:artist])
+        track (re-frame/subscribe [:track])
+        get-current-ts (Math/floor (/ (.now js/Date.) 1000))
+        api-key (re-frame/subscribe [:api-key])]
+ [:div.login-panel
+  [input-text artist-label artist artist-label
+   #(do (re-frame/dispatch
+         [:set-artist (-> % .-target .-value)]))]
+  [input-text track-label track track-label
+   #(do (re-frame/dispatch
+         [:set-track (-> % .-target .-value)]))]
+  [button "primary" "Manual Scrobble"
+  #(do (.log js/console "button clicked")
+       (generate-api-sig-fn "track.scrobble"
+                            @artist
+                            @track
+                            get-current-ts))]
+  [button "primary" "Refresh Scrobbles"
+   #(do (re-frame/dispatch
+         [:handler-get-recent-artists @api-key (cookies/get "username")]))]]))
+
 (defn authorize-user-panel []
   (let [api-key (re-frame/subscribe [:api-key])
         token (re-frame/subscribe [:token])
@@ -114,4 +138,5 @@
         [:a {:href (str "http://www.last.fm/user/"
                         (cookies/get "username")) } (cookies/get "username")]]
        [authorize-user-panel])
+      (when-not (empty? (cookies/get "username")) [manual-track-scrobble-panel])
       (when-not (empty? (cookies/get "username")) [recent-tracks-component])])))
