@@ -66,7 +66,7 @@
         track (re-frame/subscribe [:track])
         get-current-ts (Math/floor (/ (.now js/Date.) 1000))
         api-key (re-frame/subscribe [:api-key])]
- [:div.login-panel
+ [:div#track-scrobble-panel
   [input-text artist-label artist artist-label
    #(do (re-frame/dispatch
          [:set-artist (-> % .-target .-value)]))]
