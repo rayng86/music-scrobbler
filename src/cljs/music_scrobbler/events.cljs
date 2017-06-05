@@ -28,3 +28,26 @@
  (fn [db [_ api-sig]]
    (assoc db :api-sig api-sig)))
 
+;; Get Request for Recent Tracks
+(re-frame/reg-event-fx
+ :handler-get-recent-artists
+ (fn [{:keys [db]} [_ api-key username]]
+   { :http-xhrio {:method         :get
+                 :uri             (str base "?method="
+                                       "user.getrecenttracks&user=" username
+                                       "&api_key=" api-key
+                                       "&format=json")
+                 :timeout         8000
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [:good-http-result]
+                 :on-failure      [:bad-http-result]}}))
+
+(re-frame/reg-event-db
+  :good-http-result
+  (fn [db [_ result]]
+    (assoc db :api-result result)))
+
+(re-frame/reg-event-db
+  :bad-http-result
+  (fn [db [_ result]]
+    (assoc db :api-result result)))
