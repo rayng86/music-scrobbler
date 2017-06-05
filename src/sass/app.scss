@@ -1,23 +1,47 @@
+@mixin border-box() {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 #app, body {
  margin:10px;
  padding:0;
  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
  font-weight: 300;
- font-size: 12px;
+ font-size: 16px;
+ background: #FFDE00;
+}
+
+#recent-tracks-panel {
+ overflow-y:scroll;
+ height:300px;
 }
 
 h1 {
  color:#d51007;
 }
 
+hr {
+  border-color: #d51007;
+}
+
 input {
- padding:10px;
- margin: 10px 0;
+ padding:16px;
+ margin: 16px 0;
+ font-size: 16px;
+ @include border-box();
+ border:1px solid lightgray;
+ &:focus {
+    outline:none;
+    border:1px solid green;
+ }
 }
 button, .button {
  border-radius:4px;
  background: #efefef;
  border:1px solid darken(#efefef, 30%);
+ font-size:16px;
  padding:10px;
  margin-right:5px;
  margin-top:10px;
