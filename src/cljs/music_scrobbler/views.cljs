@@ -65,6 +65,23 @@
    (cookies/set! "username" @username)
    (cookies/set! "session_key" @session-key)))
 
+(defn user-authorization-dispatches []
+ (let [api-key (re-frame/subscribe [:api-key])
+       secret-key (re-frame/subscribe [:secret-key])
+       fetched-token (get (keyword-this
+                         (:query (url/url
+                                  (-> js/window .-location .-href)))) :token)
+       api-sig (js/md5 (str "api_key" @api-key
+                            "method" "auth.getSession"
+                            "token" fetched-token
+                            @secret-key))]
+  (when (empty? (cookies/get "username"))
+   (when-not (empty? fetched-token)
+    (do (re-frame/dispatch [:set-token fetched-token])
+        (re-frame/dispatch [:set-api-sig api-sig])
+        (re-frame/dispatch [:handler-get-session @api-key
+                                                 api-sig
+                                                 fetched-token]))))))
 
 (defn main-panel []
   (let [name (re-frame/subscribe [:name])]
