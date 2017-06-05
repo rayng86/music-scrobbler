@@ -99,6 +99,19 @@
                                                  fetched-token]))))))
 
 (defn main-panel []
-  (let [name (re-frame/subscribe [:name])]
+  (let [name (re-frame/subscribe [:name])
+        api-key (re-frame/subscribe [:api-key])]
+    (user-authorization-dispatches)
     (fn []
-      [:div "Hello from " @name])))
+     (when (empty? (cookies/get "username")) (set-credentials))
+     (when-not (empty? (cookies/get "username"))
+      (re-frame/dispatch
+       [:handler-get-recent-artists @api-key (cookies/get "username")]))
+     [:div
+      [:h1 @name]
+      (if-not (empty? (cookies/get "username"))
+       [:p "Logged in as: "
+        [:a {:href (str "http://www.last.fm/user/"
+                        (cookies/get "username")) } (cookies/get "username")]]
+       [authorize-user-panel])
+      (when-not (empty? (cookies/get "username")) [recent-tracks-component])])))
