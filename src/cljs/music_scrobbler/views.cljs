@@ -69,7 +69,7 @@
                                [:strong @artist " - " @track]
                                " successfully."]
     (= @scrobble-accepted? 0) [:div.scrobble-msg.fail
-                               "Scrobbled failed. Please try again."]
+                               "Scrobble failed. Please try again."]
     :else [:div ""])))
 
 (defn manual-track-scrobble-panel []
