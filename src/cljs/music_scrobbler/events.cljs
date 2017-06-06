@@ -33,16 +33,16 @@
  :handler-get-session
  (fn [{:keys [db]} [_ api-key api-sig token]]
    { :http-xhrio {:method         :get
-                 :uri             (str base "?method="
-                                       "auth.getSession"
-                                       "&api_key=" api-key
-                                       "&api_sig=" api-sig
-                                       "&token=" token
-                                       "&format=json")
-                 :timeout         8000
-                 :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success      [:good-get-session-result]
-                 :on-failure      [:bad-get-session-result]}}))
+                  :uri             (str base "?method="
+                                        "auth.getSession"
+                                        "&api_key=" api-key
+                                        "&api_sig=" api-sig
+                                        "&token=" token
+                                        "&format=json")
+                  :timeout         8000
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success      [:good-get-session-result]
+                  :on-failure      [:bad-get-session-result]}}))
 
 ;; Post Request for Track Scrobbles
 (re-frame/reg-event-fx
