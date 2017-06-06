@@ -78,6 +78,11 @@
                  :on-success      [:good-http-result]
                  :on-failure      [:bad-http-result]}}))
 
+(re-frame/reg-event-fx
+  :handler-is-authenticated?
+  (fn [{:keys [db]} [_ value]]
+    {:db   (assoc db :is-authenticated? value)}))
+
 ;; Set Artist and Track Names
 (re-frame/reg-event-db
  :set-artist

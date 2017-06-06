@@ -33,6 +33,15 @@
  @include border-box();
 }
 
+.login-user {
+ display: inline-block;
+}
+
+.log-out-btn {
+ display: inline-block;
+ margin-left: 10px;
+}
+
 h1 {
  color:#d51007;
 }

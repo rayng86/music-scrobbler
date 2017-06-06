@@ -27,6 +27,11 @@
  (fn [db]
    (:api-sig db)))
 
+(re-frame/reg-sub
+ :is-authenticated?
+ (fn [db]
+   (:is-authenticated? db)))
+
 (re-frame/reg-sub-raw
  :username
  (fn [db]

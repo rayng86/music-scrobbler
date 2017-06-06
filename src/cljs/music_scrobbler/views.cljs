@@ -114,12 +114,20 @@
 
 (defn set-credentials []
   (let [username (re-frame/subscribe [:username])
-        session-key (re-frame/subscribe [:session-key])]
+        session-key (re-frame/subscribe [:session-key])
+        is-authenticated? (re-frame/subscribe [:is-authenticated?])]
    (when-not (and (empty? @username)
                   (empty? @session-key))
-    (when (empty? (cookies/get "username"))
+    (when (and (empty? (cookies/get "username"))
+               (not=  @is-authenticated? false))
      (cookies/set! "username" @username)
      (cookies/set! "session_key" @session-key)))))
+
+(defn clear-credentials []
+  (let [username (re-frame/subscribe [:username])
+        session-key (re-frame/subscribe [:session-key])]
+     (cookies/remove! "username")
+     (cookies/remove! "session_key")))
 
 (defn user-authorization-dispatches []
  (let [api-key (re-frame/subscribe [:api-key])
@@ -139,21 +147,36 @@
                                                  api-sig
                                                  fetched-token]))))))
 
+(defn logged-in-only [component]
+ (let [is-authenticated? (re-frame/subscribe [:is-authenticated?])]
+   (when-not (false? @is-authenticated?)
+    (when-not (empty? (cookies/get "username")) component ))))
+
+(defn login-panel []
+ (if-not (empty? (cookies/get "username"))
+  [:div#login-panel
+   [:p.login-user "Logged in as: "
+    [:a {:href (str "http://www.last.fm/user/"
+                    (cookies/get "username")) } (cookies/get "username")]]
+   [button "log-out-btn" "Log Out"
+                    #(do (.log js/console "Logged out")
+                         (clear-credentials)
+                         (re-frame/dispatch [:handler-is-authenticated? false]))]]
+  ;;(get-in @get-session-result [:session :name])
+  [authorize-user-panel]))
+
 (defn main-panel []
   (let [name (re-frame/subscribe [:name])
         api-key (re-frame/subscribe [:api-key])]
     (user-authorization-dispatches)
     (fn []
-     (when (empty? (cookies/get "username")) (set-credentials))
-     (when-not (empty? (cookies/get "username"))
+     (set-credentials)
+     (logged-in-only
       (re-frame/dispatch
-       [:handler-get-recent-artists @api-key (cookies/get "username")]))
+       [:handler-get-recent-artists @api-key
+                                    (cookies/get "username")]))
      [:div
       [:h1 @name]
-      (if-not (empty? (cookies/get "username"))
-       [:p "Logged in as: "
-        [:a {:href (str "http://www.last.fm/user/"
-                        (cookies/get "username")) } (cookies/get "username")]]
-       [authorize-user-panel])
-      (when-not (empty? (cookies/get "username")) [manual-track-scrobble-panel])
-      (when-not (empty? (cookies/get "username")) [recent-tracks-component])])))
+      (login-panel)
+      (logged-in-only [manual-track-scrobble-panel])
+      (logged-in-only [recent-tracks-component])])))
