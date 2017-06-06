@@ -59,6 +59,19 @@
        [recent-tracks-panel
         @user-recent-tracks-list :name :artist]]])))
 
+(defn scrobbled-success []
+ (let [scrobble-accepted? (re-frame/subscribe [:scrobble-accepted?])
+       artist (re-frame/subscribe [:scrobble-artist])
+       track (re-frame/subscribe [:scrobble-track])]
+   (cond
+    (= @scrobble-accepted? 1) [:div.scrobble-msg.success
+                               "Scrobbled "
+                               [:strong @artist " - " @track]
+                               " successfully."]
+    (= @scrobble-accepted? 0) [:div.scrobble-msg.fail
+                               "Scrobbled failed. Please try again."]
+    :else [:div ""])))
+
 (defn manual-track-scrobble-panel []
   (let [artist-label "artist name"
         track-label "track name"
@@ -81,7 +94,8 @@
                             get-current-ts))]
   [button "primary" "Refresh Scrobbles"
    #(do (re-frame/dispatch
-         [:handler-get-recent-artists @api-key (cookies/get "username")]))]]))
+         [:handler-get-recent-artists @api-key (cookies/get "username")]))]
+  [scrobbled-success]]))
 
 (defn authorize-user-panel []
   (let [api-key (re-frame/subscribe [:api-key])

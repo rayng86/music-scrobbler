@@ -10,12 +10,27 @@
  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
  font-weight: 300;
  font-size: 16px;
- background: #FFDE00;
+ background: #FFF;
 }
 
 #recent-tracks-panel {
  overflow-y:scroll;
  height:300px;
+}
+
+.success {
+ background: #1abc9c;
+}
+
+.fail {
+ background: #c0392b;
+}
+
+.scrobble-msg {
+ color:white;
+ padding: 15px;
+ margin: 15px 0;
+ @include border-box();
 }
 
 h1 {

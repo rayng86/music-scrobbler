@@ -60,7 +60,7 @@
                                        "track=" (string/replace track #" " "+"))
                  :timeout         8000
                  :format          (ajax/text-request-format)
-                 :response-format (ajax/json-response-format {:keywords? true})
+                 :response-format (ajax/json-response-format)
                  :on-success      [:good-scrobbled-track]
                  :on-failure      [:bad-scrobbled-track]}}))
 
