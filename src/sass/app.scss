@@ -42,6 +42,12 @@ a {
  @include border-box();
 }
 
+.now-playing {
+ color: lighten(#000, 60%);
+ font-style:italic;
+ margin-left: 10px;
+}
+
 .login-user {
  display: inline-block;
 }
