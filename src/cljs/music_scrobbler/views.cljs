@@ -46,8 +46,7 @@
         [:label "Artist: "]
         [:span (get-in (artist v) [:#text])]
         [:label "Track: "]
-        [:span (track v)]
-        [:hr]])
+        [:span (track v)]])
       coll))])
 
 (defn recent-tracks-component []
@@ -156,7 +155,8 @@
  (if-not (empty? (cookies/get "username"))
   [:div#login-panel
    [:p.login-user "Logged in as: "
-    [:a {:href (str "http://www.last.fm/user/"
+    [:a {:target "_blank"
+         :href (str "http://www.last.fm/user/"
                     (cookies/get "username")) } (cookies/get "username")]]
    [button "log-out-btn" "Log Out"
                     #(do (.log js/console "Logged out")
