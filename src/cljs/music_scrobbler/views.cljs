@@ -48,7 +48,7 @@
         [:label "Track: "]
         [:span (track v)]
         (when (true? (boolean (get-in ((keyword "@attr") v) [:nowplaying])))
-         [:span.now-playing "Scrobbling now..."])])
+         [:span.now-playing "Listening now..."])])
       coll))])
 
 (defn recent-tracks-component []
