@@ -78,18 +78,18 @@
  (fn [db]
    (reaction
     (get-in @db [:recent-scrobbled-track
-                 "scrobbles" "@attr" "accepted"]))))
+                 :scrobbles (keyword "@attr") :accepted]))))
 
 (re-frame/reg-sub-raw
  :scrobble-artist
  (fn [db]
    (reaction
     (get-in @db [:recent-scrobbled-track
-                 "scrobbles" "scrobble" "artist" "#text"]))))
+                 :scrobbles :scrobble :artist :#text]))))
 
 (re-frame/reg-sub-raw
  :scrobble-track
  (fn [db]
    (reaction
     (get-in @db [:recent-scrobbled-track
-                 "scrobbles" "scrobble" "track" "#text"]))))
+                 :scrobbles :scrobble :track :#text]))))
