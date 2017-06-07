@@ -1,0 +1,90 @@
+#app, body {
+  margin: 10px;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  background: #FFF; }
+
+a {
+  color: #999999;
+  font-weight: 400; }
+  a:hover {
+    color: gray;
+    text-decoration: underline; }
+
+#recent-tracks-panel {
+  overflow-y: scroll;
+  height: 300px; }
+
+.success {
+  background: #1abc9c; }
+
+.fail {
+  background: #c0392b; }
+
+.scrobble-msg {
+  color: white;
+  padding: 15px;
+  margin: 15px 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+.now-playing {
+  color: #999999;
+  font-style: italic;
+  margin-left: 10px; }
+
+.login-user {
+  display: inline-block; }
+
+.log-out-btn {
+  display: inline-block;
+  margin-left: 10px; }
+
+h1 {
+  color: #d51007; }
+
+.track {
+  padding: 10px 0;
+  border-bottom: 1px solid #cccccc; }
+
+input {
+  padding: 16px;
+  margin: 16px 0;
+  font-size: 16px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid lightgray; }
+  input:focus {
+    outline: none;
+    border: 1px solid green; }
+
+button, .button {
+  border-radius: 4px;
+  background: #efefef;
+  border: 1px solid #a3a3a3;
+  font-size: 16px;
+  padding: 10px;
+  margin-right: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+  color: black; }
+  button:hover, .button:hover {
+    background: #e2e2e2; }
+
+.danger {
+  background: red;
+  color: white;
+  border: 1px solid #660000; }
+  .danger:hover {
+    background: #e60000; }
+
+.track label {
+  font-weight: 400; }
+  .track label:nth-child(3) {
+    margin-left: 10px; }
