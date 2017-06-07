@@ -72,8 +72,8 @@
     :else [:div ""])))
 
 (defn manual-track-scrobble-panel []
-  (let [artist-label "artist name"
-        track-label "track name"
+  (let [artist-label "Artist name"
+        track-label "Track name"
         artist (re-frame/subscribe [:artist])
         track (re-frame/subscribe [:track])
         get-current-ts (Math/floor (/ (.now js/Date.) 1000))
