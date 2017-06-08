@@ -46,10 +46,6 @@ a {
 h1 {
   color: #d51007; }
 
-.track {
-  padding: 10px 0;
-  border-bottom: 1px solid #cccccc; }
-
 input {
   padding: 16px;
   margin: 16px 0;
@@ -84,7 +80,10 @@ button, .button {
   .danger:hover {
     background: #e60000; }
 
-.track label {
-  font-weight: 400; }
-  .track label:nth-child(3) {
-    margin-left: 10px; }
+.track {
+  padding: 10px 0;
+  border-bottom: 1px solid #cccccc; }
+  .track label {
+    font-weight: 400; }
+    .track label:nth-child(3) {
+      margin-left: 10px; }
