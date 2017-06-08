@@ -35,6 +35,10 @@
                                  track
                                  (str ts)]))))
 
+(defn clear-form []
+  (re-frame/dispatch [:set-artist ""])
+  (re-frame/dispatch [:set-track ""]))
+
 (defn recent-tracks-panel
   [coll track artist]
   [:div#recent-tracks-panel
@@ -96,6 +100,7 @@
   [button "primary" "Refresh Scrobbles"
    #(do (re-frame/dispatch
          [:handler-get-recent-artists @api-key (cookies/get "username")]))]
+  [button "primary" "Clear" #(clear-form)]
   [scrobbled-success]]))
 
 (defn authorize-user-panel []
