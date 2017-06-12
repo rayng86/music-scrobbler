@@ -71,14 +71,18 @@ button, .button {
   text-decoration: none;
   color: black; }
   button:hover, .button:hover {
-    background: #e2e2e2; }
+    background: #e2e2e2;
+    text-decoration: none; }
+  button.dismiss, .button.dismiss {
+    margin-left: 20px; }
 
 .danger {
   background: red;
   color: white;
   border: 1px solid #660000; }
   .danger:hover {
-    background: #e60000; }
+    background: #e60000;
+    color: white; }
 
 .track {
   padding: 10px 0;

@@ -4,3 +4,5 @@
   {:name "music-scrobbler"
    :api-key ""
    :secret-key ""})
+   :artist ""
+   :track ""})

@@ -1,5 +1,6 @@
 (ns music-scrobbler.views
     (:require [re-frame.core :as re-frame]
+              [reagent.core :as r]
               [reagent.cookies :as cookies]
               [clojure.string :as string]
               [cemerick.url :as url]
@@ -64,44 +65,50 @@
        [recent-tracks-panel
         @user-recent-tracks-list :name :artist]]])))
 
-(defn scrobbled-success []
+(defn scrobbled-success [dismissed? dismiss-action]
  (let [scrobble-accepted? (re-frame/subscribe [:scrobble-accepted?])
+       dismiss-btn [button "dismiss" "Dismiss" #(reset! dismiss-action)]
        artist (re-frame/subscribe [:scrobble-artist])
        track (re-frame/subscribe [:scrobble-track])]
-   (cond
-    (= @scrobble-accepted? 1) [:div.scrobble-msg.success
-                               "Scrobbled "
-                               [:strong @artist " - " @track]
-                               " successfully."]
-    (= @scrobble-accepted? 0) [:div.scrobble-msg.fail
-                               "Scrobble failed. Please try again."]
-    :else [:div ""])))
+    (cond
+     (and (= @scrobble-accepted? 1) (= dismissed? false))
+      [:div.scrobble-msg.success
+      "Scrobbled " [:strong @artist " - " @track] " successfully."
+      dismiss-btn]
+     (and (= @scrobble-accepted? 0) (= dismissed? false))
+      [:div.scrobble-msg.fail
+      "Scrobble failed. Please try again."
+      dismiss-btn]
+     :else [:div ""])))
 
 (defn manual-track-scrobble-panel []
   (let [artist-label "Artist name"
         track-label "Track name"
+        msg-dismissed? (r/atom false)
         artist (re-frame/subscribe [:artist])
         track (re-frame/subscribe [:track])
         get-current-ts (Math/floor (/ (.now js/Date.) 1000))
         api-key (re-frame/subscribe [:api-key])]
- [:div#track-scrobble-panel
-  [input-text artist-label artist artist-label
-   #(do (re-frame/dispatch
-         [:set-artist (-> % .-target .-value)]))]
-  [input-text track-label track track-label
-   #(do (re-frame/dispatch
-         [:set-track (-> % .-target .-value)]))]
-  [button "primary" "Manual Scrobble"
-  #(do (.log js/console "button clicked")
-       (generate-api-sig-fn "track.scrobble"
-                            @artist
-                            @track
-                            get-current-ts))]
-  [button "primary" "Refresh Scrobbles"
-   #(do (re-frame/dispatch
-         [:handler-get-recent-artists @api-key (cookies/get "username")]))]
-  [button "primary" "Clear" #(clear-form)]
-  [scrobbled-success]]))
+ (fn []
+  [:div#track-scrobble-panel
+   [input-text artist-label artist artist-label
+    #(do (re-frame/dispatch
+          [:set-artist (-> % .-target .-value)]))]
+   [input-text track-label track track-label
+    #(do (re-frame/dispatch
+          [:set-track (-> % .-target .-value)]))]
+   [button "primary" "Manual Scrobble"
+   #(do (.log js/console "button clicked")
+        (generate-api-sig-fn "track.scrobble"
+                             @artist
+                             @track
+                             get-current-ts)
+        (reset! msg-dismissed? false))]
+   [button "primary" "Refresh Scrobbles"
+    #(do (re-frame/dispatch
+          [:handler-get-recent-artists @api-key (cookies/get "username")]))]
+   [button "primary" "Clear" #(clear-form)]
+   [scrobbled-success @msg-dismissed? msg-dismissed?]])))
 
 (defn authorize-user-panel []
   (let [api-key (re-frame/subscribe [:api-key])

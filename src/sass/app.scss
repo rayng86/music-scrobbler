@@ -86,6 +86,10 @@ button, .button {
  color:black;
  &:hover {
   background: darken(#efefef, 5%);
+  text-decoration:none;
+ }
+ &.dismiss {
+  margin-left: 20px;
  }
 }
 .danger {
@@ -95,13 +99,14 @@ button, .button {
 
  &:hover {
   background: darken(red, 5%);
+  color:white;
  }
 }
 
 .track {
  padding: 10px 0;
  border-bottom: 1px solid lighten(#000, 80%);
- 
+
  label {
   font-weight:400;
   &:nth-child(3) { margin-left:10px;}
